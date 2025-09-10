@@ -3,7 +3,7 @@ install:
 
 
 dev:
-	uv run flask --debug --app page_analyzer:app run
+	uv run flask --debug --app page_analyzer:app run --port=8000
 
 
 PORT ?= 8000
