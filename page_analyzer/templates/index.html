@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block title %}Главная{% endblock %}
+
+{% block content %}
+    <h1 class="mb-4">Анализатор страниц</h1>
+    <p class="lead">Введите URL сайта для анализа:</p>
+    <form method="post" action="/urls">
+        <div class="input-group mb-3">
+            <input type="url" name="url" class="form-control" placeholder="https://example.com" required>
+            <button class="btn btn-primary" type="submit">Проверить</button>
+        </div>
+    </form>
+{% endblock %}
