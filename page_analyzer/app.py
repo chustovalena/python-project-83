@@ -1,5 +1,5 @@
 import os
-from flask import Flask
+from flask import Flask, render_template, request
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -10,4 +10,10 @@ app.debug = True
 
 @app.route('/')
 def index():
-    return 'Hello!'
+    return render_template('index.html')
+
+@app.route('/urls')
+def urls():
+    url = request.form.get('url')
+    return f'Получен URL: {url}'
+
