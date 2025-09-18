@@ -3,6 +3,13 @@
 {% block title %}Главная{% endblock %}
 
 {% block content %}
+    {% if messages %}
+        {% for category, message in messages %}
+        <div class="flash {{ category }}">
+            {{ message }}
+        </div>
+        {% endfor %}
+    {% endif %}
     <h1 class="mb-4">Анализатор страниц</h1>
     <p class="lead">Введите URL сайта для анализа:</p>
     <form method="post" action="/urls">
