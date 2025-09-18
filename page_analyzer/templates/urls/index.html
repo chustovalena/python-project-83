@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <table data-test="urls" class="table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Имя</th>
+        <th>Последняя проверка</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for url in urls %}
+      <tr>
+        <td>{{ url.id }}</td>
+        <td>{{ url.name }}</td>
+        <td>{{ url.created_at }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}
