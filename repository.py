@@ -11,8 +11,15 @@ class UrlRepository:
 
     def get_content(self):
         with self.get_connection() as conn:
-            with conn.cursor() as cur:
-                cur.execute("SELECT * FROM urls ORDER BY id DESC")
+            with conn.cursor(row_factory=dict_row) as cur:
+                cur.execute("""SELECT DISTINCT ON (urls.id)
+                    urls.id,
+                    urls.name,
+                    url_checks.created_at AS last_check,
+                    url_checks.status_code
+                    FROM urls
+                    LEFT JOIN url_checks ON urls.id = url_checks.url_id
+                    ORDER BY urls.id, url_checks.created_at DESC;""")
                 return cur.fetchall()
 
     def find(self, url_id):
@@ -27,7 +34,7 @@ class UrlRepository:
         existing = self.find_name(name)
 
         if existing:
-            return existing
+            return None
         return self._create(url)
 
     def find_name(self, name):
@@ -46,3 +53,16 @@ class UrlRepository:
             conn.commit()
             return new_url
 
+    def new_check(self, url_id):
+        with self.get_connection() as conn:
+            with conn.cursor(row_factory=dict_row) as cur:
+                cur.execute("INSERT INTO url_checks (url_id) VALUES (%s) RETURNING id;", (url_id,))
+                check_id = cur.fetchone()['id']
+            conn.commit()
+            return check_id
+
+    def get_checks_with_id(self, url_id):
+        with self.get_connection() as conn:
+            with conn.cursor(row_factory=dict_row) as cur:
+                cur.execute("SELECT * FROM url_checks WHERE url_id = %s ORDER BY created_at DESC;", (url_id,))
+                return cur.fetchall()
