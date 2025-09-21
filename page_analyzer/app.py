@@ -46,9 +46,10 @@ def index():
 
 @app.route('/urls')
 def get_urls():
-    urls = repo.get_content()
     app.logger.info('Запрос к /urls')
-    return render_template('urls/index.html', urls=urls)
+    messages = get_flashed_messages(with_categories=True)
+    urls = repo.get_content()
+    return render_template('urls/index.html', urls=urls, messages=messages)
 
 
 @app.post('/urls')
@@ -61,21 +62,43 @@ def new_url():
             flash(error, "danger")
         return redirect(url_for('index'))
     saved = repo.save(url)
-    print(saved)
-    if 'id' in saved:
+    if saved:
         flash('Url был успешно добавлен', 'success')
     else:
-        flash('Url уже существует')
+        flash('Url уже существует', 'error')
     return redirect(url_for('get_urls'))
 
 
 @app.route('/urls/<url_id>')
 def get_url(url_id):
     app.logger.info('Запрос к /urls/<url_id>')
+    messages = get_flashed_messages(with_categories=True)
     url = repo.find(url_id)
     if not url:
         abort(404)
+    cheks = repo.get_checks_with_id(url_id)
+
     return render_template(
         'urls/show.html',
-        url=url
+        url=url,
+        cheks=cheks,
+        messages=messages
     )
+
+
+@app.post('/urls/<int:url_id>/checks')
+def check(url_id):
+    app.logger.info(f'POST запрос к /urls/{url_id}/checks')
+    url = repo.find(url_id)
+    if not url:
+        flash('No such id', 'error')
+        return redirect(url_for('get_urls'))
+
+    try:
+        repo.new_check(url_id)
+    except Exception:
+        app.logger.exception('Failed to create url_check')
+        flash('Cannot crate check', 'error')
+        return redirect(url_for('get_url', url_id=url_id))
+
+    return redirect(url_for('get_url', url_id=url_id))
