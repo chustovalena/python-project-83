@@ -53,10 +53,10 @@ class UrlRepository:
             conn.commit()
             return new_url
 
-    def new_check(self, url_id):
+    def new_check(self, url_id, status_code, h1, title, description):
         with self.get_connection() as conn:
             with conn.cursor(row_factory=dict_row) as cur:
-                cur.execute("INSERT INTO url_checks (url_id) VALUES (%s) RETURNING id;", (url_id,))
+                cur.execute("INSERT INTO url_checks (url_id, status_code, h1, title, description) VALUES (%s, %s, %s, %s, %s) RETURNING id;", (url_id, status_code, h1, title, description,))
                 check_id = cur.fetchone()['id']
             conn.commit()
             return check_id
