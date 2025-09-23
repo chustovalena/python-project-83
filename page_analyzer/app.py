@@ -1,5 +1,7 @@
 import logging
 import os
+import requests
+from page_analyzer.services.checks import perform_check
 from flask import \
     Flask, \
     render_template, \
@@ -76,12 +78,12 @@ def get_url(url_id):
     url = repo.find(url_id)
     if not url:
         abort(404)
-    cheks = repo.get_checks_with_id(url_id)
+    checks = repo.get_checks_with_id(url_id)
 
     return render_template(
         'urls/show.html',
         url=url,
-        cheks=cheks,
+        checks=checks,
         messages=messages
     )
 
@@ -93,9 +95,18 @@ def check(url_id):
     if not url:
         flash('No such id', 'error')
         return redirect(url_for('get_urls'))
-
     try:
-        repo.new_check(url_id)
+        response = requests.get(url['name'], timeout=5)
+        response.raise_for_status()
+        result = perform_check(url['name'])
+        repo.new_check(
+            url_id,
+            result['status_code'],
+            result['h1'],
+            result['title'],
+            result['description']
+        )
+        flash('Проверка успешно выполнена', 'success')
     except Exception:
         app.logger.exception('Failed to create url_check')
         flash('Cannot crate check', 'error')
