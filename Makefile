@@ -21,3 +21,7 @@ render-start:
 
 lint:
 	ruff check
+
+
+test:
+	uv run pytest -v
