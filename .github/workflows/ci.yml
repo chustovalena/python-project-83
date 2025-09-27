@@ -48,6 +48,12 @@ jobs:
       - name: Run tests with coverage
         run: uv run pytest --cov=page_analyzer --cov-report=xml
 
+      - name: Install SonarScanner
+        run: |
+          curl -sSLo sonar-scanner.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.9.2.727-linux.zip
+          unzip sonar-scanner.zip
+          echo "$PWD/sonar-scanner-4.9.2.727-linux/bin" >> $GITHUB_PATH
+
       - name: SonarQube Scan
         run: |
           sonar-scanner \
