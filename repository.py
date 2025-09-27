@@ -27,7 +27,7 @@ class UrlRepository:
             with conn.cursor(row_factory=dict_row) as cur:
                 cur.execute("SELECT * FROM urls WHERE id=%s", (url_id,))
                 url = cur.fetchone()
-                return dict(url) if url else None
+                return url if url else None
 
     def save(self, url):
         name = url['url']
@@ -41,7 +41,8 @@ class UrlRepository:
         with self.get_connection() as conn:
             with conn.cursor(row_factory=dict_row) as cur:
                 cur.execute("SELECT * FROM urls WHERE name = %s;", (name,))
-                return cur.fetchone()
+                url = cur.fetchone()
+                return url if url else None
 
     def _create(self, url):
         with self.get_connection() as conn:
