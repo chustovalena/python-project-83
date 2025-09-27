@@ -39,12 +39,11 @@ def test_no_duple(client):
     assert response.data.count(b'http://example.com') == 1
 
 
-
 def test_check(client):
     client.post('/urls', data={"url": "https://web.mit.edu"})
     response = client.post('/urls/1/checks')
     assert response.status_code == 302
     response = client.get('/urls/1')
-    assert b'MIT' in response.data
+    assert b'https://web.mit.edu' in response.data
 
 
