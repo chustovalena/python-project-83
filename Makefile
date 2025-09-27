@@ -25,3 +25,10 @@ lint:
 
 test:
 	uv run pytest -v
+
+coverage:
+	uv run pytest --cov=page_analyzer --cov-report=xml
+
+sonar: coverage
+	sonar-scanner \
+		-Dsonar.token=$$SONAR_TOKEN
