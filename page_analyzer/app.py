@@ -17,7 +17,7 @@ from repository import UrlRepository
 from page_analyzer.log_conf import RequestFormatter, RequestFilter
 
 
-def create_app():
+def create_app(db_url=None):
     app = Flask(__name__)
 
     formatter = RequestFormatter(
@@ -31,7 +31,7 @@ def create_app():
 
     load_dotenv()
     app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
-    app.config['DATABASE_URL'] = os.getenv('DATABASE_URL')
+    app.config['DATABASE_URL'] = db_url or os.getenv('DATABASE_URL')
     app.debug = True
 
     repo = UrlRepository(app.config['DATABASE_URL'])
@@ -109,3 +109,7 @@ def create_app():
             return redirect(url_for('get_url', url_id=url_id))
 
         return redirect(url_for('get_url', url_id=url_id))
+    return app
+
+
+app = create_app()
