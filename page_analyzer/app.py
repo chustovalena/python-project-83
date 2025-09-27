@@ -109,6 +109,17 @@ def create_app(db_url=None):
             return redirect(url_for('get_url', url_id=url_id))
 
         return redirect(url_for('get_url', url_id=url_id))
+
+    @app.errorhandler(404)
+    def not_found(error):
+        app.logger.error(f'404 error: {error}')
+        return render_template('errors/404.html'), 404
+
+    @app.errorhandler(500)
+    def internal_error(error):
+        app.logger.error(f'404 error: {error}')
+        return render_template("500.html"), 500
+
     return app
 
 
