@@ -68,7 +68,7 @@ def create_app(db_url=None):
             flash('Url уже существует', 'error')
         return redirect(url_for('get_urls'))
 
-    @app.route('/urls/<url_id>')
+    @app.route('/urls/<int:url_id>')
     def get_url(url_id):
         app.logger.info('Запрос к /urls/<url_id>')
         messages = get_flashed_messages(with_categories=True)
