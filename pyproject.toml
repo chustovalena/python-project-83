@@ -10,8 +10,10 @@ dependencies = [
     "gunicorn>=23.0.0",
     "jinja2>=3.1.6",
     "lxml>=6.0.2",
+    "psycopg2>=2.9.10",
     "psycopg[binary]>=3.2.10",
     "pytest>=8.4.2",
+    "pytest-cov>=7.0.0",
     "python-dotenv>=1.1.1",
     "requests>=2.32.5",
 ]
