@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %}Страница не найдена — 404{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-12 col-md-8 col-lg-6">
+      <div class="text-center">
+
+        <h1 class="display-1 fw-bold">404</h1>
+
+        <h2 class="h4 mb-3">Страница не найдена</h2>
+
+        <p class="mb-4 text-muted">
+          К сожалению, запрошенная страница не найдена или была удалена.
+          Пожалуйста, проверьте URL или вернитесь на главную страницу.
+        </p>
+
+        <div class="d-flex justify-content-center gap-2">
+          <a href="{{ url_for('index') }}" class="btn btn-primary btn-lg">
+            На главную
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
