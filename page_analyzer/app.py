@@ -62,7 +62,7 @@ def create_app(db_url=None):
             return render_template('index.html'), 422
         saved = repo.save(url)
         if saved:
-            flash('Url был успешно добавлен', 'success')
+            flash('Страница успешно добавлена', 'success')
         else:
             flash('Url уже существует', 'error')
         return redirect(url_for('get_urls'))
