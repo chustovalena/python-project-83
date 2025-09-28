@@ -61,10 +61,11 @@ def create_app(db_url=None):
             flash('Некорректный URL', 'error')
             return render_template('index.html'), 422
         saved = repo.save(url)
-        if saved:
+        if isinstance(saved, dict):
             flash('Страница успешно добавлена', 'success')
         else:
-            flash('Url уже существует', 'error')
+            flash('Страница уже существует', 'info')
+            return redirect(url_for('get_url', url_id=saved))
         return redirect(url_for('get_urls'))
 
     @app.route('/urls/<int:url_id>')
