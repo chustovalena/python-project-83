@@ -104,7 +104,7 @@ def create_app(db_url=None):
             flash('Проверка успешно выполнена', 'success')
         except Exception:
             app.logger.exception('Failed to create url_check')
-            flash('Cannot crate check', 'error')
+            flash('Произошла ошибка при проверке', 'error')
             return redirect(url_for('get_url', url_id=url_id))
 
         return redirect(url_for('get_url', url_id=url_id))
