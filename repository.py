@@ -1,5 +1,5 @@
-import psycopg
-from psycopg.rows import dict_row
+import psycopg2
+from psycopg2.extras import DictCursor
 
 
 class UrlRepository:
@@ -7,11 +7,11 @@ class UrlRepository:
         self.db_url = db_url
 
     def get_connection(self):
-        return psycopg.connect(self.db_url, row_factory=dict_row)
+        return psycopg2.connect(self.db_url, cursor_factory=DictCursor)
 
     def get_content(self):
         with self.get_connection() as conn:
-            with conn.cursor(row_factory=dict_row) as cur:
+            with conn.cursor(cursor_factory=DictCursor) as cur:
                 cur.execute("""SELECT DISTINCT ON (urls.id)
                     urls.id,
                     urls.name,
@@ -24,7 +24,7 @@ class UrlRepository:
 
     def find(self, url_id):
         with self.get_connection() as conn:
-            with conn.cursor(row_factory=dict_row) as cur:
+            with conn.cursor(cursor_factory=DictCursor) as cur:
                 cur.execute("SELECT * FROM urls WHERE id=%s", (url_id,))
                 url = cur.fetchone()
                 return url if url else None
@@ -39,14 +39,14 @@ class UrlRepository:
 
     def find_name(self, name):
         with self.get_connection() as conn:
-            with conn.cursor(row_factory=dict_row) as cur:
+            with conn.cursor(cursor_factory=DictCursor) as cur:
                 cur.execute("SELECT * FROM urls WHERE name = %s;", (name,))
                 url = cur.fetchone()
                 return url if url else None
 
     def _create(self, url):
         with self.get_connection() as conn:
-            with conn.cursor(row_factory=dict_row) as cur:
+            with conn.cursor(cursor_factory=DictCursor) as cur:
                 cur.execute("""
                 INSERT INTO urls (name) VALUES (%s) RETURNING id, name, created_at;
                 """, (url['url'],))
@@ -56,7 +56,7 @@ class UrlRepository:
 
     def new_check(self, url_id, status_code, h1, title, description):
         with self.get_connection() as conn:
-            with conn.cursor(row_factory=dict_row) as cur:
+            with conn.cursor(cursor_factory=DictCursor) as cur:
                 cur.execute("INSERT INTO url_checks (url_id, status_code, h1, title, description) VALUES (%s, %s, %s, %s, %s) RETURNING id;", (url_id, status_code, h1, title, description,))
                 check_id = cur.fetchone()['id']
             conn.commit()
@@ -64,6 +64,6 @@ class UrlRepository:
 
     def get_checks_with_id(self, url_id):
         with self.get_connection() as conn:
-            with conn.cursor(row_factory=dict_row) as cur:
+            with conn.cursor(cursor_factory=DictCursor) as cur:
                 cur.execute("SELECT * FROM url_checks WHERE url_id = %s ORDER BY created_at DESC;", (url_id,))
                 return cur.fetchall()

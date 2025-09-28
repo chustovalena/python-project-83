@@ -1,6 +1,6 @@
 import os
 import pytest
-import psycopg
+import psycopg2
 from page_analyzer.app import create_app
 from repository import UrlRepository
 
@@ -15,7 +15,7 @@ def db_url():
 
 @pytest.fixture(scope='session', autouse=True)
 def setup_test_db(db_url):
-    with psycopg.connect(db_url) as conn:
+    with psycopg2.connect(db_url) as conn:
         with conn.cursor() as cur:
             with open('database.sql', 'r') as f:
                 schema_sql = f.read()
@@ -25,7 +25,7 @@ def setup_test_db(db_url):
 
 @pytest.fixture(autouse=True)
 def clean_tables(db_url):
-    with psycopg.connect(db_url) as conn:
+    with psycopg2.connect(db_url) as conn:
         with conn.cursor() as cur:
             cur.execute("TRUNCATE url_checks, urls RESTART IDENTITY CASCADE;")
         conn.commit()
