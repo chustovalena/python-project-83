@@ -5,6 +5,11 @@ from page_analyzer.app import create_app
 from repository import UrlRepository
 
 
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+ROOT_DIR = os.path.dirname(BASE_DIR)
+SCHEMA_PATH = os.path.join(ROOT_DIR, "database.sql")
+
+
 @pytest.fixture(scope='session')
 def db_url():
     test_db_url = os.environ.get("TEST_DATABASE_URL")
@@ -26,7 +31,7 @@ def db_url():
 def setup_test_db(db_url):
     with psycopg2.connect(db_url) as conn:
         with conn.cursor() as cur:
-            with open('database.sql', 'r') as f:
+            with open(SCHEMA_PATH, 'r') as f:
                 schema_sql = f.read()
                 cur.execute(schema_sql)
             conn.commit()
