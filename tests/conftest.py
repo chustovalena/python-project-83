@@ -7,11 +7,10 @@ from repository import UrlRepository
 
 @pytest.fixture(scope='session')
 def db_url():
-    return (
-        os.environ.get("TEST_DATABASE_URL")
-        or os.environ.get("DATABASE_URL")
-        or "postgresql://test_user:test_pass@localhost:5432/test_db"
-    )
+    db_url = os.environ.get("TEST_DATABASE_URL")
+    if not db_url:
+        db_url = "postgresql://test_user:test_pass@localhost:5432/test_db"
+    return db_url
 
 
 @pytest.fixture(scope='session', autouse=True)
