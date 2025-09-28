@@ -10,25 +10,26 @@ def add_check(repo, url_id, status_code=200, h1='H1', title='Title', description
 
 
 def test_create(repo):
-    created = add_url(repo)
+    created, flag = add_url(repo)
 
     assert len(repo.get_content()) == 1
     assert created is not None
     assert 'id' in created
     assert created['name'] == 'http://example.com'
     assert created['created_at'] is not None
+    assert flag is True
 
 
 def test_create_unique(repo):
     add_url(repo)
-    duble = add_url(repo)
+    duble, flag = add_url(repo)
 
     assert len(repo.get_content()) == 1
-    assert duble is None or duble == {}
+    assert flag is False
 
 
 def test_find(repo):
-    created = add_url(repo, 'http://google.com')
+    created, _ = add_url(repo, 'http://google.com')
     found = repo.find(created['id'])
 
     assert created['name'] == found['name']
@@ -40,8 +41,8 @@ def test_find_return_none_for_wrong_id(repo):
 
 
 def test_find_name(repo):
-    created1 = add_url(repo)
-    created2 = add_url(repo, 'http://smthing.com')
+    created1, _ = add_url(repo)
+    created2, _ = add_url(repo, 'http://smthing.com')
 
     assert created1 == repo.find_name(created1['name'])
     assert created2 == repo.find_name(created2['name'])
@@ -52,7 +53,7 @@ def test_find_name_wrong_is_none(repo):
 
 
 def test_new_check(repo):
-    saved = add_url(repo)
+    saved, _ = add_url(repo)
     check_id = add_check(repo, saved['id'], 200, 'hello', 'from', 'outside')
 
     assert check_id is not None
@@ -67,7 +68,7 @@ def test_new_check(repo):
 
 
 def test_get_checks_with_id(repo):
-    saved = add_url(repo)
+    saved, _ = add_url(repo)
     check1 = add_check(repo, saved['id'], status_code=300)
     check2 = add_check(repo, saved['id'], status_code=200)
     checks = repo.get_checks_with_id(saved['id'])
