@@ -50,9 +50,9 @@ jobs:
 
       - name: Download and extract SonarScanner
         run: |
-          curl -sSLo sonar-scanner.tar.gz https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.9.2.727-linux.tar.gz
-          tar -xzf sonar-scanner.tar.gz
-          echo "$PWD/sonar-scanner-4.9.2.727-linux/bin" >> $GITHUB_PATH
+          curl -sSLo sonar-scanner.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-5.0.1.3006-linux.zip
+          unzip sonar-scanner.zip
+          echo "$PWD/sonar-scanner-5.0.1.3006-linux/bin" >> $GITHUB_PATH
 
       - name: SonarQube Scan
         run: |
