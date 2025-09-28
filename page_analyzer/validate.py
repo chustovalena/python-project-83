@@ -1,19 +1,23 @@
 from urllib.parse import urlparse
 
 
-def validate(form):
+from urllib.parse import urlparse
+
+
+def validate(url):
     errors = []
-    url = form.get('url', '').strip()
+    url_value = url.get("url", "").strip()
 
-    if not url:
-        errors.append('URL is required')
+    if len(url_value) > 255:
+        errors.append("Url length must be less than 256 characters")
 
-    elif len(url) > 255:
-        errors.append('URL length must be less than 256 characters')
+    parsed = urlparse(url_value)
 
-    else:
-        parsed = urlparse(url)
-        if parsed.scheme not in ('http', 'https') or not parsed.netloc:
-            errors.append('Incorrect URL')
+    if parsed.scheme not in ("http", "https"):
+        errors.append("URL must start with http:// or https://")
+
+    hostname = parsed.hostname
+    if not hostname or "." not in hostname:
+        errors.append("Incorrect URL")
 
     return errors
