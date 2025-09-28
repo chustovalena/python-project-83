@@ -34,7 +34,7 @@ class UrlRepository:
         existing = self.find_name(name)
 
         if existing:
-            return None
+            return existing['id']
         return self._create(url)
 
     def find_name(self, name):
