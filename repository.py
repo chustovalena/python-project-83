@@ -30,12 +30,11 @@ class UrlRepository:
                 return url if url else None
 
     def save(self, url):
-        name = url['url']
-        existing = self.find_name(name)
+        existing = self.find_name(url['url'])
 
         if existing:
-            return existing['id']
-        return self._create(url)
+            return existing, False
+        return self._create(url), True
 
     def find_name(self, name):
         with self.get_connection() as conn:
