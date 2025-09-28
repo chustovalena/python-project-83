@@ -1,9 +1,6 @@
 from urllib.parse import urlparse
 
 
-from urllib.parse import urlparse
-
-
 def validate(url):
     errors = []
     url_value = url.get("url", "").strip()
