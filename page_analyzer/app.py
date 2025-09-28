@@ -58,9 +58,8 @@ def create_app(db_url=None):
         url = request.form.to_dict()
         errors = validate(url)
         if errors:
-            for error in errors:
-                flash(error, "danger")
-            return redirect(url_for('index'))
+            flash('Некорректный URL', 'error')
+            return render_template('index.html'), 422
         saved = repo.save(url)
         if saved:
             flash('Url был успешно добавлен', 'success')
@@ -118,7 +117,7 @@ def create_app(db_url=None):
     @app.errorhandler(500)
     def internal_error(error):
         app.logger.error(f'404 error: {error}')
-        return render_template("500.html"), 500
+        return render_template("errors/500.html"), 500
 
     return app
 
