@@ -12,7 +12,7 @@ import requests
 from page_analyzer.services.checks import perform_check
 
 
-def register_routes(app, repo):
+def register_urls(app, repo):
     @app.route('/')
     def index():
         app.logger.info('Запрос к /')
@@ -62,6 +62,8 @@ def register_routes(app, repo):
             messages=messages
         )
 
+
+def register_checks(app, repo):
     @app.post('/urls/<int:url_id>/checks')
     def check(url_id):
         app.logger.info(f'POST запрос к /urls/{url_id}/checks')
@@ -88,6 +90,8 @@ def register_routes(app, repo):
 
         return redirect(url_for('get_url', url_id=url_id))
 
+
+def register_errors(app):
     @app.errorhandler(404)
     def not_found(error):
         app.logger.error(f'404 error: {error}')
@@ -97,3 +101,9 @@ def register_routes(app, repo):
     def internal_error(error):
         app.logger.error(f'404 error: {error}')
         return render_template("errors/500.html"), 500
+
+
+def register_routes(app, repo):
+    register_errors(app)
+    register_urls(app, repo)
+    register_checks(app, repo)
