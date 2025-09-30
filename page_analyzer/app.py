@@ -11,10 +11,11 @@ from flask import \
     get_flashed_messages, \
     abort, \
     flash
-from page_analyzer.validate import validate
+from page_analyzer.services.validate import validate
 from dotenv import load_dotenv
 from repository import UrlRepository
 from page_analyzer.log_conf import RequestFormatter, RequestFilter
+from page_analyzer.services.normalize import normalize_url
 
 
 def create_app(db_url=None):
@@ -60,7 +61,8 @@ def create_app(db_url=None):
         if errors:
             flash('Некорректный URL', 'error')
             return render_template('index.html'), 422
-        saved, flag = repo.save(url)
+        normalized = normalize_url(url['url'])
+        saved, flag = repo.save({'url': normalized})
         if flag:
             flash('Страница успешно добавлена', 'success')
         else:
@@ -102,7 +104,7 @@ def create_app(db_url=None):
                 result['title'],
                 result['description']
             )
-            flash('Проверка успешно выполнена', 'success')
+            flash('Страница успешно проверена', 'success')
         except Exception:
             app.logger.exception('Failed to create url_check')
             flash('Произошла ошибка при проверке', 'error')
