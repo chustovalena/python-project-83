@@ -23,3 +23,9 @@ def test_validate_hostname():
 
     assert "Incorrect URL" in errors_existdot
     assert "Incorrect URL" in errors_existhost
+
+
+def test_validate_with_at_in_url():
+    url = {'url': 'http://ththeheh@rt'}
+    errors = validate(url)
+    assert "Incorrect URL" in errors
