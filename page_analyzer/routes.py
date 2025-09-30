@@ -99,7 +99,7 @@ def register_errors(app):
 
     @app.errorhandler(500)
     def internal_error(error):
-        app.logger.error(f'404 error: {error}')
+        app.logger.error(f'500 error: {error}')
         return render_template("errors/500.html"), 500
 
 
