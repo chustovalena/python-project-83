@@ -66,7 +66,7 @@ def create_app(db_url=None):
         else:
             flash('Страница уже существует', 'info')
             return redirect(url_for('get_url', url_id=saved['id']))
-        return redirect(url_for('get_urls'))
+        return redirect(url_for('get_url', url_id=saved['id']))
 
     @app.route('/urls/<int:url_id>')
     def get_url(url_id):
