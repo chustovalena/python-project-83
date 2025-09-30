@@ -27,7 +27,10 @@ def test_perform_check_parss_fields(monkeypatch):
     """
     fake_resp = FakeResponse(html, status_code=200)
 
-    monkeypatch.setattr('page_analyzer.services.checks.requests.get', lambda *args, **kwargs: fake_resp)
+    monkeypatch.setattr(
+        'page_analyzer.services.checks.requests.get',
+        lambda *args, **kwargs: fake_resp
+    )
 
     result = perform_check('http://example.com')
 
@@ -54,7 +57,10 @@ def test_perform_check_no_data(monkeypatch):
 
 def test_perform_check_raise_for_bad_status(monkeypatch):
     fake_resp = FakeResponse('<html></html>', status_code=500)
-    monkeypatch.setattr('page_analyzer.services.checks.requests.get', lambda *args, **kwargs: fake_resp)
+    monkeypatch.setattr(
+        'page_analyzer.services.checks.requests.get',
+        lambda *args, **kwargs: fake_resp
+    )
 
     with pytest.raises(requests.exceptions.HTTPError):
         perform_check('http://example.com')
