@@ -40,7 +40,10 @@ def test_perform_check_parss_fields(monkeypatch):
 def test_perform_check_no_data(monkeypatch):
     fake_resp = FakeResponse('', status_code=200)
 
-    monkeypatch.setattr('page_analyzer.services.checks.requests.get', lambda *args, **kwargs: fake_resp)
+    monkeypatch.setattr(
+        'page_analyzer.services.checks.requests.get',
+        lambda *args, **kwargs: fake_resp
+    )
 
     result = perform_check('http://example.com')
     assert result['status_code'] == 200
