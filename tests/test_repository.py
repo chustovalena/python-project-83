@@ -1,11 +1,11 @@
-import pytest
 
 
 def add_url(repo, url='http://example.com'):
     return repo.save({'url': url})
 
 
-def add_check(repo, url_id, status_code=200, h1='H1', title='Title', description='Desc'):
+def add_check(repo, url_id, status_code=200, h1='H1',
+              title='Title', description='Desc'):
     return repo.new_check(url_id, status_code, h1, title, description)
 
 
