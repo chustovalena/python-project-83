@@ -1,4 +1,4 @@
-from page_analyzer.validate import validate
+from page_analyzer.services.validate import validate
 
 
 def test_validate_overlength():
