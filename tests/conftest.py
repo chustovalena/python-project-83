@@ -2,7 +2,7 @@ import os
 import pytest
 import psycopg2
 from page_analyzer.app import create_app
-from repository import UrlRepository
+from page_analyzer.repository import UrlRepository
 
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))

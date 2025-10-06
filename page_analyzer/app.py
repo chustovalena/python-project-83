@@ -2,7 +2,7 @@ import logging
 import os
 from flask import Flask
 from dotenv import load_dotenv
-from repository import UrlRepository
+from page_analyzer.repository import UrlRepository
 from page_analyzer.log_conf import RequestFormatter, RequestFilter
 from page_analyzer.routes import register_routes
 
